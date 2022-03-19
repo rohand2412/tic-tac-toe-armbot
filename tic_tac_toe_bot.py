@@ -19,9 +19,11 @@ class TicTacToeBot:
         self._board = np.zeros((self.BOARD_LEN, self.BOARD_LEN), dtype=int)
 
     def play(self) -> None:
+        """Updates the board with the computer's move"""
         self._board[self._find_best_move()] = 1
 
     def play_opponent(self, row: int, col: int) -> bool:
+        """Updates the board with the opponent's move"""
         if not self._board[row][col]:
             self._board[row][col] = -1
             return True
@@ -29,6 +31,7 @@ class TicTacToeBot:
             return False
 
     def is_end_of_game(self) -> BoardStatus:
+        """Checks if the game is over and who won"""
         row_sum_mat = np.matmul(self._board, self._LATERAL_SUM_MAT)
         col_sum_mat = np.matmul(self._board.transpose(), self._LATERAL_SUM_MAT)
         top_left_diag_sum = self._board[0][0] + self._board[1][1] + self._board[2][2]
@@ -56,6 +59,7 @@ class TicTacToeBot:
                 return BoardStatus.UNFINISHED
 
     def print_board(self) -> None:
+        """Displays the board"""
         for i in range(len(self._board) - 1):
             for j in range(len(self._board[i]) - 1):
                 print(str(-self._board[i][j]) + " | ", end="")
@@ -66,6 +70,7 @@ class TicTacToeBot:
         print(-self._board[len(self._board) - 1][len(self._board[len(self._board) - 1]) - 1])
 
     def _find_best_move(self) -> tuple:
+        """Finds the best move for the computer"""
         bestVal = -10
         bestMove = None
         for i in range(len(self._board)):
@@ -80,6 +85,7 @@ class TicTacToeBot:
         return bestMove
 
     def _minimax(self, depth: int, maximize: bool) -> int:
+        """Minimax algorithm that determines the best move"""
         endGameVal = self.is_end_of_game()
         if endGameVal != BoardStatus.UNFINISHED:
             if endGameVal == BoardStatus.COMPUTER_WINS:
