@@ -21,6 +21,7 @@ class TicTacToeBot:
 
     BOARD_LEN = 3
     _LATERAL_SUM_MAT = np.ones(3)
+    XO_TABLE = {-1: "X", 0: " ", 1: "O"}
 
     def __init__(self, difficulty: Difficulty):
         self._difficulty = difficulty
@@ -72,12 +73,12 @@ class TicTacToeBot:
         """Displays the board"""
         for i in range(len(self._board) - 1):
             for j in range(len(self._board[i]) - 1):
-                print(str(-self._board[i][j]) + " | ", end="")
-            print(-self._board[i][len(self._board[i]) - 1])
+                print(TicTacToeBot.XO_TABLE[self._board[i][j]] + " | ", end="")
+            print(TicTacToeBot.XO_TABLE[self._board[i][len(self._board[i]) - 1]])
             print("---------")
         for j in range(len(self._board[len(self._board) - 1]) - 1):
-            print(str(-self._board[len(self._board) - 1][j]) + " | ", end="")
-        print(-self._board[len(self._board) - 1][len(self._board[len(self._board) - 1]) - 1])
+            print(TicTacToeBot.XO_TABLE[self._board[len(self._board) - 1][j]] + " | ", end="")
+        print(TicTacToeBot.XO_TABLE[self._board[len(self._board) - 1][len(self._board[len(self._board) - 1]) - 1]])
 
     def _find_best_move(self) -> tuple:
         """Finds the best move for the computer"""
