@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Script to interact with the bot via the terminal"""
 
-from tic_tac_toe_bot import TicTacToeBot, BoardStatus
+from tic_tac_toe_bot import TicTacToeBot, BoardStatus, Difficulty
 import enum
 
 class State(enum.Enum):
@@ -9,7 +9,7 @@ class State(enum.Enum):
     HUMAN_TURN = 1
 
 def main() -> None:
-    bot = TicTacToeBot()
+    bot = TicTacToeBot(Difficulty.HARD)
     state = State.HUMAN_TURN
     while bot.is_end_of_game() == BoardStatus.UNFINISHED:
         if state == State.HUMAN_TURN:

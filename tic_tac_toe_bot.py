@@ -3,6 +3,7 @@
 
 import numpy as np
 import enum
+import random
 
 class BoardStatus(enum.Enum):
     UNFINISHED = 2
@@ -10,18 +11,26 @@ class BoardStatus(enum.Enum):
     PLAYER_WINS = -1
     DRAW = 0
 
+class Difficulty(enum.Enum):
+    EASY = 0
+    MEDIUM = 1
+    HARD = 2
+
 class TicTacToeBot:
     """Encapsulates all tictactoe logic and data"""
 
     BOARD_LEN = 3
     _LATERAL_SUM_MAT = np.ones(3)
 
-    def __init__(self):
+    def __init__(self, difficulty: Difficulty):
+        self._difficulty = difficulty
+        self._turnsPlayed = 0
         self._board = np.zeros((TicTacToeBot.BOARD_LEN, TicTacToeBot.BOARD_LEN), dtype=int)
 
     def play(self) -> None:
         """Updates the board with the computer's move"""
         self._board[self._find_best_move()] = 1
+        self._turnsPlayed += 1
 
     def play_opponent(self, row: int, col: int) -> bool:
         """Updates the board with the opponent's move"""
@@ -72,6 +81,30 @@ class TicTacToeBot:
 
     def _find_best_move(self) -> tuple:
         """Finds the best move for the computer"""
+        if self._difficulty == Difficulty.EASY:
+            return self._find_best_move_easy()
+        elif self._difficulty == Difficulty.MEDIUM:
+            if self._turnsPlayed % 2 == 0:
+                return self._find_best_move_easy()
+            else:
+                return self._find_best_move_hard()
+        elif self._difficulty == Difficulty.HARD:
+            return self._find_best_move_hard()
+
+    def _find_best_move_easy(self) -> tuple:
+        """Finds the best move for the computer on HARD difficulty"""
+        movesVisited = 0
+        bestMove = None
+        for i in range(len(self._board)):
+            for j in range(len(self._board[i])):
+                if not self._board[i][j]:
+                    movesVisited += 1
+                    if random.random() < 1/movesVisited:
+                        bestMove = (i, j)
+        return bestMove
+
+    def _find_best_move_hard(self) -> tuple:
+        """Finds the best move for the computer on HARD difficulty"""
         bestVal = -10
         bestMove = None
         for i in range(len(self._board)):
