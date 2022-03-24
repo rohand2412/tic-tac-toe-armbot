@@ -13,10 +13,11 @@ class BoardStatus(enum.Enum):
 class TicTacToeBot:
     """Encapsulates all tictactoe logic and data"""
 
+    BOARD_LEN = 3
+    _LATERAL_SUM_MAT = np.ones(3)
+
     def __init__(self):
-        self.BOARD_LEN = 3
-        self._LATERAL_SUM_MAT = np.ones(3)
-        self._board = np.zeros((self.BOARD_LEN, self.BOARD_LEN), dtype=int)
+        self._board = np.zeros((TicTacToeBot.BOARD_LEN, TicTacToeBot.BOARD_LEN), dtype=int)
 
     def play(self) -> None:
         """Updates the board with the computer's move"""
@@ -32,20 +33,20 @@ class TicTacToeBot:
 
     def is_end_of_game(self) -> BoardStatus:
         """Checks if the game is over and who won"""
-        row_sum_mat = np.matmul(self._board, self._LATERAL_SUM_MAT)
-        col_sum_mat = np.matmul(self._board.transpose(), self._LATERAL_SUM_MAT)
+        row_sum_mat = np.matmul(self._board, TicTacToeBot._LATERAL_SUM_MAT)
+        col_sum_mat = np.matmul(self._board.transpose(), TicTacToeBot._LATERAL_SUM_MAT)
         top_left_diag_sum = self._board[0][0] + self._board[1][1] + self._board[2][2]
         top_right_diag_sum = self._board[0][2] + self._board[1][1] + self._board[2][0]
 
-        if (np.amax(row_sum_mat) >= self.BOARD_LEN * 1
-            or np.amax(col_sum_mat) >= self.BOARD_LEN * 1
-            or top_left_diag_sum >= self.BOARD_LEN * 1
-            or top_right_diag_sum >= self.BOARD_LEN * 1):
+        if (np.amax(row_sum_mat) >= TicTacToeBot.BOARD_LEN * 1
+            or np.amax(col_sum_mat) >= TicTacToeBot.BOARD_LEN * 1
+            or top_left_diag_sum >= TicTacToeBot.BOARD_LEN * 1
+            or top_right_diag_sum >= TicTacToeBot.BOARD_LEN * 1):
             return BoardStatus.COMPUTER_WINS
-        elif (np.amin(row_sum_mat) <= self.BOARD_LEN * -1
-            or np.amin(col_sum_mat) <= self.BOARD_LEN * -1
-            or top_left_diag_sum <= self.BOARD_LEN * -1
-            or top_right_diag_sum <= self.BOARD_LEN * -1):
+        elif (np.amin(row_sum_mat) <= TicTacToeBot.BOARD_LEN * -1
+            or np.amin(col_sum_mat) <= TicTacToeBot.BOARD_LEN * -1
+            or top_left_diag_sum <= TicTacToeBot.BOARD_LEN * -1
+            or top_right_diag_sum <= TicTacToeBot.BOARD_LEN * -1):
             return BoardStatus.PLAYER_WINS
         else:
             draw = True
